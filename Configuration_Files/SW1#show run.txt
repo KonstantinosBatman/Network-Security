@@ -1,0 +1,157 @@
+SW1#show run
+Building configuration...
+
+Current configuration : 4601 bytes
+!
+! Last configuration change at 01:24:26 UTC Sat Dec 6 2025
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname SW1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+ip arp inspection vlan 10,20
+ip arp inspection validate src-mac dst-mac ip
+!
+!
+!
+ip dhcp snooping vlan 10,20
+no ip dhcp snooping information option
+ip dhcp snooping
+ip cef
+no ipv6 cef
+!
+!
+errdisable recovery cause psecure-violation
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0c7d.0d67.0000
+ switchport port-security
+ ip arp inspection limit rate 25 burst interval 2
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0c1f.d881.0000
+ switchport port-security
+ ip arp inspection limit rate 25 burst interval 2
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ switchport access vlan 20
+ switchport mode access
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0cca.3a02.0000
+ switchport port-security
+ ip arp inspection limit rate 25 burst interval 2
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ switchport access vlan 20
+ switchport mode access
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 0c59.c6f7.0000
+ switchport port-security
+ ip arp inspection limit rate 25 burst interval 2
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ switchport trunk allowed vlan 10,20
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ ip arp inspection trust
+ negotiation auto
+ ip dhcp snooping trust
+!
+interface GigabitEthernet1/1
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ negotiation auto
+!
+ip forward-protocol nd
+!
+ip http server
+!
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+!
+end
