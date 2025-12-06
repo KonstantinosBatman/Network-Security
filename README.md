@@ -13,31 +13,6 @@ The following security features are implemented and tested:
 
 ---
 
-## IP Addressing Plan
-
-### VLANs
-| VLAN | Name     | Subnet        | Gateway        |
-|-----:|----------|---------------|----------------|
-| 10   | USERS_10 | 10.0.10.0/24  | 10.0.10.254   |
-| 20   | USERS_20 | 10.0.20.0/24  | 10.0.20.254   |
-
-### Routed Links
-| Link        | Subnet            |
-|------------|-------------------|
-| R1 – R2    | 192.168.13.0/30   |
-| DHCP - R2  | 172.18.10.0/28    |
-
----
-
-## VLAN Configuration
-- VLANs 10 and 20 are created on **SW1**
-- Access ports are statically assigned to their respective VLANs
-- The uplink between **SW1 ↔ R1** is configured as a trunk
-
-![VLANs](./Images/SW1_SHOW_VLAN_BRIEF.png)
-
----
-
 # Port Security
 
 ### Purpose
@@ -129,11 +104,77 @@ SW1(config-if-range)# ip arp inspection limit rate 25 burst interval 2
 
 ---
 
-### sgiw ip arp inspection interfaces
+### show ip arp inspection interfaces
 ![SHOW IP ARP INSPECTION INTERFACES](./Images/SW1_SHOW_IP_ARP_INSPECTION_INTERFACES.png)
 
 ---
 
 ### show ip arp inspection statistics
 ![SHOW IP ARP INSPECTION STATISTICS](./Images/SW1_SHOW_IP_ARP_INSPECTION_STATISTICS.png)
+
+---
+
+# Attacker Prevention Example
+
+### The rogue PC disconnected PC1 and plugged in his own
+![ATTACKER EXAMPLE](./Images/Attacker_Example_Topology.png)
+
+### Syslog Messages when Attacker plugged in
+![SYSLOS MESSAGES](./Images/Attacker_Example.png)
+
+### Show port security after Attacker plugged in 
+![SHOW PORT SECURITY AFTER ATTACKER PLUGGED IN](./Images/Attacker_Example_Show_Port_Security.png)
+
+---
+
+# Expected Results
+
+After completing the configuration and verification steps in this lab, the following results are expected:
+
+1. **DHCP Snooping Operation**
+   - DHCP Snooping is enabled globally and per VLAN on the access switch.
+   - DHCP responses are accepted only from trusted ports connected to the legitimate DHCP server.
+   - Rogue or unauthorized DHCP servers are blocked on untrusted access ports.
+   - Valid DHCP bindings are created for end hosts and can be verified in the DHCP Snooping binding table.
+
+2. **Port Security Enforcement**
+   - Access ports accept traffic only from authorized MAC addresses.
+   - The maximum allowed number of MAC addresses per port is enforced.
+   - When a violation occurs (e.g., MAC spoofing or multiple devices connected), the configured violation action is triggered.
+   - Learned MAC addresses are correctly recorded when sticky MAC learning is enabled.
+
+3. **Dynamic ARP Inspection (DAI) Protection**
+   - DAI validates ARP packets against the DHCP Snooping binding table.
+   - Legitimate ARP traffic is permitted between hosts in the same VLAN.
+   - Malicious or spoofed ARP packets are dropped on untrusted ports.
+   - Trusted uplink ports allow valid ARP traffic without inspection errors.
+
+4. **End-User Connectivity**
+   - Hosts receive valid IP address assignments from the DHCP server.
+   - Normal network connectivity is maintained for legitimate users.
+   - Security features operate transparently without impacting authorized traffic.
+
+5. **Verification and Monitoring**
+   - `show ip dhcp snooping` confirms DHCP Snooping status and configuration.
+   - `show port-security` verifies Port Security settings and violation counts.
+   - `show ip arp inspection` confirms Active Dynamic ARP Inspection functionality.
+
+Successful observation of these results confirms that the access layer is protected against common Layer 2 attacks such as rogue DHCP servers, MAC address spoofing, and ARP poisoning.
+
+---
+
+# ****Important Note****
+If you want open my gns3 file and test out the lab for yourself, you'll need to obtain the Cisco IOS Images that I used for this lab****, which are:
+
+- Switch Image: vios_l2-adventerprisek9-m.SSA.high_iron_20180619.qcow2
+- Router Image: c7200-adventerprisek9-mz.124-24.T5.image
+- PC Image: TinnyCore-current.iso
+
+# Final Notes
+
+**Thank you for reviewing this project.**
+- You are welcome to use, adapt, or extend this project for educational or lab purposes.
+- For questions, suggestions, or improvements, feel free to message me on Discord (@Konstantinoz).
+
+
 
