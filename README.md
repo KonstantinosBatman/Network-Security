@@ -2,7 +2,7 @@
 
 ![Security Lab Topology](./Images/SECURITY_LAB_TOPOLOGY.png)
 
-## Overview
+# Overview
 This lab demonstrates core Layer 2 security mechanisms in a routed and VLAN-segmented network using **GNS3**.  
 The focus is on protecting the access layer against common attacks such as rogue DHCP servers, MAC spoofing, and ARP poisoning.
 
